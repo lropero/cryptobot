@@ -1,0 +1,23 @@
+{
+  "name": "cryptobot",
+  "version": "1.0.0",
+  "description": "Trading bot for Binance",
+  "main": "index.js",
+  "author": "Luciano Ropero <lropero@gmail.com>",
+  "private": true,
+  "dependencies": {
+    "chalk": "^2.4.1"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.2",
+    "standard": "^11.0.1",
+    "yarn-upgrade-all": "^0.3.0"
+  },
+  "scripts": {
+    "clean": "yarn add --dev rimraf && rimraf ./yarn.lock && rimraf ./yarn-*.log && rimraf ./node_modules && yarn cache clean",
+    "lint": "standard",
+    "nuke": "yarn run clean && yarn",
+    "start": "node index.js",
+    "upgrade": "yarn add --dev yarn-upgrade-all && yarn-upgrade-all && yarn run nuke"
+  }
+}
