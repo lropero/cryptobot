@@ -9,7 +9,8 @@
     "chalk": "^2.4.1",
     "express": "^4.16.3",
     "http-errors": "^1.6.3",
-    "morgan": "^1.9.0"
+    "morgan": "^1.9.0",
+    "node-binance-api": "^0.5.0"
   },
   "devDependencies": {
     "rimraf": "^2.6.2",
