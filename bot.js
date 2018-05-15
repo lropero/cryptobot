@@ -1,7 +1,6 @@
-const calculateEMA = require('./helpers/calculateEMA')
-const calculateSMA = require('./helpers/calculateSMA')
 const config = require('./config')
 const server = require('./server')
+const { calculateEMA, calculateSMA } = require('./helpers')
 
 class Bot {
   constructor (funds) {
