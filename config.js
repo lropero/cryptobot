@@ -5,5 +5,6 @@ module.exports = {
     secret: 'APISECRET'
   },
   markets: ['BTCUSDT'],
+  port: 7007,
   timeframe: '5m'
 }
