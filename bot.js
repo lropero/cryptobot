@@ -1,6 +1,6 @@
 const config = require('./config')
 const server = require('./server')
-const { calculateEMA, calculateSMA } = require('./helpers')
+const { calculateEMA, calculateSMA, withIndicators } = require('./helpers')
 
 class Bot {
   constructor (funds) {
@@ -19,18 +19,21 @@ class Bot {
     }
 
     const closes = chart.candles.map((candle) => candle.close)
-    chart.ema = calculateEMA(closes, 30)
-    chart.sma = calculateSMA(closes, 10)
+    const volumes = chart.candles.map((candle) => candle.volume)
+
+    chart.candles[chart.candles.length - 1].ema = calculateEMA(closes, 30)
+    chart.candles[chart.candles.length - 1].sma = calculateSMA(closes, 10)
+    chart.candles[chart.candles.length - 1].vol = calculateSMA(volumes, 20)
   }
 
-  addChart (market, candles, ema, sma) {
-    const closes = candles.map((candle) => candle.close)
-
+  addChart (market, candles) {
     const chart = {
       market,
-      candles,
-      ema: calculateEMA(closes, 30),
-      sma: calculateSMA(closes, 10)
+      candles: withIndicators(candles, {
+        ema: 30,
+        sma: 10,
+        vol: 20
+      })
     }
 
     this.charts.push(chart)
