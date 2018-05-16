@@ -37,11 +37,11 @@ binance.balance((error, balances) => {
 
       const candles = ticks.map((tick) => ({
         time: tick[0],
-        open: tick[1],
-        high: tick[2],
-        low: tick[3],
-        close: tick[4],
-        volume: tick[5],
+        open: parseFloat(tick[1]),
+        high: parseFloat(tick[2]),
+        low: parseFloat(tick[3]),
+        close: parseFloat(tick[4]),
+        volume: parseFloat(tick[5]),
         trades: tick[8],
         volumePerTrade: tick[5] / tick[8]
       }))
@@ -55,7 +55,17 @@ binance.balance((error, balances) => {
         const { t: time, o: open, h: high, l: low, c: close, v: volume, n: trades, x: isFinal } = ticks
 
         if (isFinal) {
-          const candle = { time, open, high, low, close, volume, trades, volumePerTrade: volume / trades }
+          const candle = {
+            time,
+            open: parseFloat(open),
+            high: parseFloat(high),
+            low: parseFloat(low),
+            close: parseFloat(close),
+            volume: parseFloat(volume),
+            trades,
+            volumePerTrade: volume / trades
+          }
+
           bot.addCandle(market, candle)
         }
       })
