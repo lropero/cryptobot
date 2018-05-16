@@ -13,15 +13,16 @@
     "node-binance-api": "^0.5.0"
   },
   "devDependencies": {
+    "jest": "^22.4.3",
     "rimraf": "^2.6.2",
     "standard": "^11.0.1",
     "yarn-upgrade-all": "^0.3.0"
   },
   "scripts": {
     "clean": "yarn add --dev rimraf && rimraf ./yarn.lock && rimraf ./yarn-*.log && rimraf ./node_modules && yarn cache clean",
-    "lint": "standard",
     "nuke": "yarn run clean && yarn",
     "start": "node index.js",
+    "test": "standard && jest ./coverage/*.test.js",
     "upgrade": "yarn add --dev yarn-upgrade-all && yarn-upgrade-all && yarn run nuke"
   }
 }
