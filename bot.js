@@ -13,7 +13,11 @@ class Bot {
   addCandle (market, candle) {
     const chart = this.charts.filter((chart) => chart.market === market)[0]
 
-    chart.candles.push(candle)
+    chart.candles.push({
+      ...candle,
+      indicators: {}
+    })
+
     while (chart.candles.length > config.candles) {
       chart.candles.shift()
     }
@@ -21,9 +25,9 @@ class Bot {
     const closes = chart.candles.map((candle) => candle.close)
     const volumes = chart.candles.map((candle) => candle.volume)
 
-    chart.candles[chart.candles.length - 1].ema = calculateEMA(closes, 30)
-    chart.candles[chart.candles.length - 1].sma = calculateSMA(closes, 10)
-    chart.candles[chart.candles.length - 1].vol = calculateSMA(volumes, 20)
+    chart.candles[chart.candles.length - 1].indicators.ema = calculateEMA(closes, 30)
+    chart.candles[chart.candles.length - 1].indicators.sma = calculateSMA(closes, 10)
+    chart.candles[chart.candles.length - 1].indicators.vol = calculateSMA(volumes, 20)
   }
 
   addChart (market, candles) {
