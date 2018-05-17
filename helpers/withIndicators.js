@@ -5,9 +5,10 @@ const { indicators } = require('../config')
 function withIndicators (candles) {
   const candlesWithIndicators = []
 
-  const hasEMA = Object.keys(indicators).includes('ema')
-  const hasSMA = Object.keys(indicators).includes('sma')
-  const hasVOL = Object.keys(indicators).includes('vol')
+  const list = Object.keys(indicators)
+  const hasEMA = list.includes('ema')
+  const hasSMA = list.includes('sma')
+  const hasVOL = list.includes('vol')
 
   candles.forEach((candle) => {
     candlesWithIndicators.push({

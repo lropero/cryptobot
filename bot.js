@@ -22,9 +22,10 @@ class Bot {
       chart.shift()
     }
 
-    const hasEMA = Object.keys(indicators).includes('ema')
-    const hasSMA = Object.keys(indicators).includes('sma')
-    const hasVOL = Object.keys(indicators).includes('vol')
+    const list = Object.keys(indicators)
+    const hasEMA = list.includes('ema')
+    const hasSMA = list.includes('sma')
+    const hasVOL = list.includes('vol')
 
     if (hasEMA || hasSMA) {
       const closes = chart.map((candle) => candle.close)
