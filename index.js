@@ -2,16 +2,16 @@ const chalk = require('chalk')
 const binance = require('node-binance-api')
 
 const Bot = require('./bot')
-const config = require('./config')
 const pckg = require('./package.json')
+const { keys, markets, periods, timeframe } = require('./config')
 
 const logError = (string) => console.log(chalk.red(`[Error] ${string}`))
 
 console.log(chalk.green(`CryptoBot v${pckg.version}`))
 
 binance.options({
-  APIKEY: config.keys.api,
-  APISECRET: config.keys.secret,
+  APIKEY: keys.api,
+  APISECRET: keys.secret,
   test: true,
   useServerTime: true
 })
@@ -31,8 +31,8 @@ binance.balance((error, balances) => {
 
   const bot = new Bot(funds)
 
-  config.markets.forEach((market) => {
-    binance.candlesticks(market, config.timeframe, (error, ticks) => {
+  markets.forEach((market) => {
+    binance.candlesticks(market, timeframe, (error, ticks) => {
       if (error) return logError(`binance.candlesticks: ${error.statusMessage}`)
 
       const candles = ticks.map((tick) => ({
@@ -50,7 +50,7 @@ binance.balance((error, balances) => {
 
       bot.addChart(market, candles)
 
-      binance.websockets.candlesticks(market, config.timeframe, (candlesticks) => {
+      binance.websockets.candlesticks(market, timeframe, (candlesticks) => {
         const { k: ticks } = candlesticks
         const { t: time, o: open, h: high, l: low, c: close, v: volume, n: trades, x: isFinal } = ticks
 
@@ -69,6 +69,6 @@ binance.balance((error, balances) => {
           bot.addCandle(market, candle)
         }
       })
-    }, { limit: config.candles })
+    }, { limit: periods })
   })
 })

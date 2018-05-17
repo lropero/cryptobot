@@ -1,46 +1,45 @@
-const config = require('./config')
 const server = require('./server')
 const { calculateEMA, calculateSMA, withIndicators } = require('./helpers')
+const { indicators, periods } = require('./config')
 
 class Bot {
   constructor (funds) {
-    this.charts = []
+    this.charts = {}
     this.funds = funds
 
     server(this)
   }
 
   addCandle (market, candle) {
-    const chart = this.charts.filter((chart) => chart.market === market)[0]
+    const chart = this.charts[market]
 
-    chart.candles.push({
+    chart.push({
       ...candle,
       indicators: {}
     })
 
-    while (chart.candles.length > config.candles) {
-      chart.candles.shift()
+    while (chart.length > periods) {
+      chart.shift()
     }
 
-    const closes = chart.candles.map((candle) => candle.close)
-    const volumes = chart.candles.map((candle) => candle.volume)
+    const hasEMA = Object.keys(indicators).includes('ema')
+    const hasSMA = Object.keys(indicators).includes('sma')
+    const hasVOL = Object.keys(indicators).includes('vol')
 
-    chart.candles[chart.candles.length - 1].indicators.ema = calculateEMA(closes, 30)
-    chart.candles[chart.candles.length - 1].indicators.sma = calculateSMA(closes, 10)
-    chart.candles[chart.candles.length - 1].indicators.vol = calculateSMA(volumes, 20)
+    if (hasEMA || hasSMA) {
+      const closes = chart.map((candle) => candle.close)
+      if (hasEMA) chart[chart.length - 1].indicators.ema = calculateEMA(closes, indicators.ema)
+      if (hasSMA) chart[chart.length - 1].indicators.sma = calculateSMA(closes, indicators.sma)
+    }
+
+    if (hasVOL) {
+      const volumes = chart.map((candle) => candle.volume)
+      chart[chart.length - 1].indicators.vol = calculateSMA(volumes, indicators.vol)
+    }
   }
 
   addChart (market, candles) {
-    const chart = {
-      market,
-      candles: withIndicators(candles, {
-        ema: 30,
-        sma: 10,
-        vol: 20
-      })
-    }
-
-    this.charts.push(chart)
+    this.charts[market] = withIndicators(candles)
   }
 
   getFunds () {

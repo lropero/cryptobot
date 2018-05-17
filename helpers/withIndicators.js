@@ -1,7 +1,8 @@
 const calculateEMA = require('./calculateEMA')
 const calculateSMA = require('./calculateSMA')
+const { indicators } = require('../config')
 
-function withIndicators (candles, indicators) {
+function withIndicators (candles) {
   const candlesWithIndicators = []
 
   const hasEMA = Object.keys(indicators).includes('ema')
