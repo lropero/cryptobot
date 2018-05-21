@@ -1,15 +1,13 @@
 module.exports = {
-  indicators: {
-    ema: 30,
-    sma: 10,
-    vol: 20
-  },
-  keys: {
+  binanceKeys: {
     api: 'APIKEY',
     secret: 'APISECRET'
   },
-  markets: ['BTCUSDT'],
-  periods: 50,
-  port: 7007,
-  timeframe: '5m'
+  markets: [
+    {
+      symbol: 'BTCUSDT',
+      strategyName: 'example'
+    }
+  ],
+  serverPort: 7007
 }

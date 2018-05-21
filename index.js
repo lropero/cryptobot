@@ -3,22 +3,21 @@ const binance = require('node-binance-api')
 
 const Bot = require('./bot')
 const pckg = require('./package.json')
-const { keys, markets, periods, timeframe } = require('./config')
-
-const logError = (string) => console.log(chalk.red(`[Error] ${string}`))
+const { binanceKeys, markets } = require('./config')
+const { logError } = require('./helpers')
 
 console.log(chalk.green(`CryptoBot v${pckg.version}`))
 
 binance.options({
-  APIKEY: keys.api,
-  APISECRET: keys.secret,
+  APIKEY: binanceKeys.api,
+  APISECRET: binanceKeys.secret,
   test: true,
   useServerTime: true
 })
 
 binance.balance((error, balances) => {
   if (error) {
-    logError(`binance.balance: ${error.statusMessage}`)
+    logError(`Function binance.balance(): ${error.statusMessage}`)
     return process.exit()
   }
 
@@ -31,9 +30,16 @@ binance.balance((error, balances) => {
 
   const bot = new Bot(funds)
 
-  markets.forEach((market) => {
-    binance.candlesticks(market, timeframe, (error, ticks) => {
-      if (error) return logError(`binance.candlesticks: ${error.statusMessage}`)
+  markets.forEach(({ symbol, strategyName }) => {
+    let strategy
+    try {
+      strategy = require(`./strategies/${strategyName}`)
+    } catch (error) {
+      return logError(`${error.toString()}, skipping ${symbol}`)
+    }
+
+    binance.candlesticks(symbol, strategy.timeframe, (error, ticks) => {
+      if (error) return logError(`Function binance.candlesticks(): ${error.statusMessage}`)
 
       const candles = ticks.map((tick) => ({
         time: tick[0],
@@ -44,13 +50,16 @@ binance.balance((error, balances) => {
         volume: parseFloat(tick[5]),
         trades: tick[8],
         volumePerTrade: tick[5] / tick[8]
-      }))
+      })).slice(0, strategy.periods)
 
-      candles.pop()
+      const chart = {
+        candles: candles.length ? candles.reverse() : [],
+        indicators: {}
+      }
 
-      bot.addChart(market, candles)
+      bot.initMarket(symbol, chart, strategy)
 
-      binance.websockets.candlesticks(market, timeframe, (candlesticks) => {
+      binance.websockets.candlesticks(symbol, strategy.timeframe, (candlesticks) => {
         const { k: ticks } = candlesticks
         const { t: time, o: open, h: high, l: low, c: close, v: volume, n: trades, x: isFinal } = ticks
 
@@ -66,9 +75,9 @@ binance.balance((error, balances) => {
             volumePerTrade: volume / trades
           }
 
-          bot.addCandle(market, candle)
+          bot.addCandle(symbol, candle)
         }
       })
-    }, { limit: periods })
+    }, { limit: strategy.periods + 1 })
   })
 })

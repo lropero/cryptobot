@@ -1,9 +1,5 @@
-const calculateEMA = require('./calculateEMA')
-const calculateSMA = require('./calculateSMA')
-const withIndicators = require('./withIndicators')
+const logError = require('./logError')
 
 module.exports = {
-  calculateEMA,
-  calculateSMA,
-  withIndicators
+  logError
 }
