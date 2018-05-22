@@ -20,8 +20,9 @@ class Bot {
 
     if (chart.candles.length) {
       this.calculateIndicators(symbol)
-      console.log(chalk.blue(`Market ${chalk.bold(symbol)} initialized -> using strategy ${chalk.bold(strategy.name || 'Unnamed strategy')}`))
     }
+
+    console.log(chalk.blue(`Market ${chalk.bold(symbol)} initialized -> using strategy ${chalk.bold(strategy.name || 'Unnamed strategy')}`))
   }
 
   addCandle (symbol, candle) {
