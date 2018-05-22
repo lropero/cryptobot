@@ -85,6 +85,10 @@ class Bot {
     })
   }
 
+  getChart (symbol) {
+    return this.markets[symbol] && this.markets[symbol].chart
+  }
+
   getFunds () {
     return this.funds
   }

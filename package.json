@@ -1,6 +1,6 @@
 {
   "name": "cryptobot",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Trading bot for Binance",
   "main": "index.js",
   "author": "Luciano Ropero <lropero@gmail.com>",

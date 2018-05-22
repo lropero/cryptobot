@@ -17,7 +17,7 @@ binance.options({
 
 binance.balance((error, balances) => {
   if (error) {
-    logError(`Function binance.balance(): ${error.statusMessage}`)
+    logError(`Function binance.balance(): ${error.statusMessage || error.toString()}`)
     return process.exit()
   }
 
@@ -39,7 +39,7 @@ binance.balance((error, balances) => {
     }
 
     binance.candlesticks(symbol, strategy.timeframe, (error, ticks) => {
-      if (error) return logError(`Function binance.candlesticks(): ${error.statusMessage}`)
+      if (error) return logError(`Function binance.candlesticks(): ${error.statusMessage || error.toString()}`)
 
       const candles = ticks.map((tick) => ({
         time: tick[0],
