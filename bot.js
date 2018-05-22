@@ -34,6 +34,7 @@ class Bot {
     }
 
     this.calculateIndicators(symbol)
+    this.executeStrategy(symbol)
   }
 
   calculateIndicators (symbol) {
@@ -83,6 +84,11 @@ class Bot {
         })
       }
     })
+  }
+
+  // TODO
+  executeStrategy (symbol) {
+    // const { rules } = this.markets[symbol].strategy
   }
 
   getChart (symbol) {

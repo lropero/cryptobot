@@ -2,8 +2,8 @@ const createError = require('http-errors')
 
 module.exports = (req, res) => {
   const bot = req.app.get('bot')
-  const symbol = req.params.symbol
 
+  const symbol = req.params.symbol
   const chart = bot.getChart(symbol)
 
   if (!chart) {
