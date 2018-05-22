@@ -3,7 +3,6 @@ const tulind = require('tulind')
 
 const server = require('./server')
 const { logError } = require('./helpers')
-const { periods } = require('./config')
 
 class Bot {
   constructor (funds) {
@@ -11,17 +10,6 @@ class Bot {
     this.markets = {}
 
     server(this)
-  }
-
-  addCandle (symbol, candle) {
-    const { chart } = this.markets[symbol]
-
-    chart.candles.unshift(candle)
-    while (chart.candles.length > periods) {
-      chart.candles.pop()
-    }
-
-    this.calculateIndicators(symbol)
   }
 
   initMarket (symbol, chart, strategy) {
@@ -34,6 +22,17 @@ class Bot {
       this.calculateIndicators(symbol)
       console.log(chalk.blue(`Market ${chalk.bold(symbol)} initialized -> using strategy ${chalk.bold(strategy.name || 'Unnamed strategy')}`))
     }
+  }
+
+  addCandle (symbol, candle) {
+    const { chart, strategy } = this.markets[symbol]
+
+    chart.candles.unshift(candle)
+    while (chart.candles.length > strategy.periods) {
+      chart.candles.pop()
+    }
+
+    this.calculateIndicators(symbol)
   }
 
   calculateIndicators (symbol) {
