@@ -44,13 +44,15 @@ class Bot {
     const allowedInputs = Object.keys(candles[0])
     const indicators = strategy.indicators || []
 
-    indicators.forEach(({ name = '', inputs = {}, options = {} }) => {
-      const indicator = tulind.indicators[name]
-      if (indicator) {
+    indicators.forEach(({ name = '', indicator = '', inputs = {}, options = {} }) => {
+      if (chart.indicators[name]) return logError(`Indicator names must be unique, ${name} already exists`)
+
+      const indicatorObj = tulind.indicators[indicator]
+      if (indicatorObj) {
         let valid = true
 
         const indicatorInputs = []
-        indicator.input_names.forEach((inputName) => {
+        indicatorObj.input_names.forEach((inputName) => {
           if (!allowedInputs.includes(inputName) && !allowedInputs.includes(inputs[inputName])) {
             logError(!Object.keys(inputs).includes(inputName) ? `Missing input '${inputName}' for indicator ${name}` : `Allowed values for input ${name}->${inputName}: ${allowedInputs.join(', ')}`)
             valid = false
@@ -63,7 +65,7 @@ class Bot {
         })
 
         const indicatorOptions = []
-        indicator.option_names.forEach((optionName) => {
+        indicatorObj.option_names.forEach((optionName) => {
           if (!Object.keys(options).includes(optionName)) {
             logError(`Missing option '${optionName}' for indicator ${name}`)
             valid = false
@@ -75,10 +77,10 @@ class Bot {
 
         if (!valid) return
 
-        indicator.indicator(indicatorInputs, indicatorOptions, (error, results) => {
-          if (error) return logError(`Indicator ${indicator.name}: ${error.toString()}`)
+        indicatorObj.indicator(indicatorInputs, indicatorOptions, (error, results) => {
+          if (error) return logError(`Indicator ${name}: ${error.toString()}`)
           chart.indicators[name] = {}
-          indicator.output_names.forEach((outputName, index) => {
+          indicatorObj.output_names.forEach((outputName, index) => {
             chart.indicators[name][outputName] = results[index].reverse()
           })
         })

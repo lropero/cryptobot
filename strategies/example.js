@@ -2,9 +2,10 @@ module.exports = {
   name: 'Example strategy',
   periods: 50,
   timeframe: '5m',
-  indicators: [ // List of available indicators: https://tulipindicators.org/list
+  indicators: [ // https://tulipindicators.org/list
     {
       name: 'macd',
+      indicator: 'macd',
       inputs: {
         real: 'close'
       },
@@ -15,7 +16,8 @@ module.exports = {
       }
     },
     {
-      name: 'sma',
+      name: 'moving average',
+      indicator: 'sma',
       inputs: {
         real: 'close'
       },
@@ -24,11 +26,22 @@ module.exports = {
       }
     },
     {
-      name: 'stoch',
+      name: 'stochastics',
+      indicator: 'stoch',
       options: {
         '%d period': 7,
         '%k period': 14,
         '%k slowing period': 3
+      }
+    },
+    {
+      name: 'volume',
+      indicator: 'sma',
+      inputs: {
+        real: 'volume'
+      },
+      options: {
+        period: 1
       }
     }
   ],
