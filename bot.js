@@ -19,7 +19,7 @@ class Bot {
     }
 
     if (chart.candles.length) {
-      this.calculateIndicators(symbol)
+      this.calculateIndicators(symbol, true)
     }
 
     console.log(chalk.blue(`Market ${chalk.bold(symbol)} initialized -> using strategy ${chalk.bold(strategy.name || 'Unnamed strategy')}`))
@@ -37,7 +37,7 @@ class Bot {
     this.executeStrategy(symbol)
   }
 
-  calculateIndicators (symbol) {
+  calculateIndicators (symbol, init = false) {
     const { chart, strategy } = this.markets[symbol]
 
     const candles = chart.candles.slice().reverse()
@@ -45,46 +45,46 @@ class Bot {
     const indicators = strategy.indicators || []
 
     indicators.forEach(({ name = '', indicator = '', inputs = {}, options = {} }) => {
-      if (chart.indicators[name]) return logError(`Indicator names must be unique, ${name} already exists`)
+      if (init && chart.indicators[name]) return logError(`Indicator names must be unique, ${name} already exists`)
 
       const indicatorObj = tulind.indicators[indicator]
-      if (indicatorObj) {
-        let valid = true
+      if (!indicatorObj) return logError(`Indicator ${indicator} doesn't exists`)
 
-        const indicatorInputs = []
-        indicatorObj.input_names.forEach((inputName) => {
-          if (!allowedInputs.includes(inputName) && !allowedInputs.includes(inputs[inputName])) {
-            logError(!Object.keys(inputs).includes(inputName) ? `Missing input '${inputName}' for indicator ${name}` : `Allowed values for input ${name}->${inputName}: ${allowedInputs.join(', ')}`)
-            valid = false
-            return
-          }
-          if (valid) {
-            const input = allowedInputs.includes(inputName) ? inputName : inputs[inputName]
-            indicatorInputs.push(candles.map((candle) => candle[input]))
-          }
+      let valid = true
+
+      const indicatorInputs = []
+      indicatorObj.input_names.forEach((inputName) => {
+        if (!allowedInputs.includes(inputName) && !allowedInputs.includes(inputs[inputName])) {
+          logError(!Object.keys(inputs).includes(inputName) ? `Missing input '${inputName}' for indicator ${name}` : `Allowed values for input ${name}->${inputName}: ${allowedInputs.join(', ')}`)
+          valid = false
+          return
+        }
+        if (valid) {
+          const input = allowedInputs.includes(inputName) ? inputName : inputs[inputName]
+          indicatorInputs.push(candles.map((candle) => candle[input]))
+        }
+      })
+
+      const indicatorOptions = []
+      indicatorObj.option_names.forEach((optionName) => {
+        if (!Object.keys(options).includes(optionName)) {
+          logError(`Missing option '${optionName}' for indicator ${name}`)
+          valid = false
+        }
+        if (valid) {
+          indicatorOptions.push(options[optionName])
+        }
+      })
+
+      if (!valid) return
+
+      indicatorObj.indicator(indicatorInputs, indicatorOptions, (error, results) => {
+        if (error) return logError(`Indicator ${name}: ${error.toString()}`)
+        chart.indicators[name] = {}
+        indicatorObj.output_names.forEach((outputName, index) => {
+          chart.indicators[name][outputName] = results[index].reverse()
         })
-
-        const indicatorOptions = []
-        indicatorObj.option_names.forEach((optionName) => {
-          if (!Object.keys(options).includes(optionName)) {
-            logError(`Missing option '${optionName}' for indicator ${name}`)
-            valid = false
-          }
-          if (valid) {
-            indicatorOptions.push(options[optionName])
-          }
-        })
-
-        if (!valid) return
-
-        indicatorObj.indicator(indicatorInputs, indicatorOptions, (error, results) => {
-          if (error) return logError(`Indicator ${name}: ${error.toString()}`)
-          chart.indicators[name] = {}
-          indicatorObj.output_names.forEach((outputName, index) => {
-            chart.indicators[name][outputName] = results[index].reverse()
-          })
-        })
-      }
+      })
     })
   }
 
