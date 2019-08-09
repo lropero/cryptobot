@@ -1,5 +1,5 @@
+const Binance = require('node-binance-api')
 const chalk = require('chalk')
-const binance = require('node-binance-api')
 
 const Bot = require('./bot')
 const { binanceKeys, markets } = require('./config')
@@ -7,6 +7,8 @@ const { logError } = require('./helpers')
 const { version } = require('./package.json')
 
 console.log(chalk.green(`CryptoBot v${version}`))
+
+const binance = new Binance()
 
 binance.options({
   APIKEY: binanceKeys.api,

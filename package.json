@@ -6,24 +6,24 @@
   "author": "Luciano Ropero <lropero@gmail.com>",
   "private": true,
   "dependencies": {
-    "chalk": "^2.4.1",
-    "express": "^4.16.3",
-    "http-errors": "^1.6.3",
-    "morgan": "^1.9.0",
-    "node-binance-api": "^0.6.0",
-    "tulind": "^0.8.10"
+    "chalk": "^2.4.2",
+    "express": "^4.17.1",
+    "http-errors": "^1.7.3",
+    "morgan": "^1.9.1",
+    "node-binance-api": "^0.9.5",
+    "tulind": "^0.8.18"
   },
   "devDependencies": {
-    "jest": "^22.4.4",
-    "rimraf": "^2.6.2",
-    "standard": "^11.0.1",
-    "yarn-upgrade-all": "^0.3.0"
+    "rimraf": "^2.6.3",
+    "standard": "^13.1.0"
   },
   "scripts": {
-    "clean": "yarn add --dev rimraf && rimraf ./yarn.lock && rimraf ./yarn-*.log && rimraf ./node_modules && yarn cache clean",
-    "nuke": "yarn run clean && yarn",
+    "clean": "rimraf ./yarn.lock && rimraf ./yarn-*.log && yarn cache clean",
+    "init": "rimraf ./node_modules && yarn",
+    "lint": "npx standard --fix",
+    "nuke": "yarn run clean && yarn run init",
     "start": "node index.js",
-    "test": "standard && jest ./coverage/*.test.js",
-    "upgrade": "yarn add --dev yarn-upgrade-all && yarn-upgrade-all && yarn run nuke"
+    "test": "npx standard",
+    "upgrade": "npx upgradeps"
   }
 }
