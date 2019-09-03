@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "rimraf": "^3.0.0",
-    "standard": "^14.0.2"
+    "standard": "^14.1.0"
   },
   "scripts": {
     "clean": "rimraf ./yarn.lock && rimraf ./yarn-*.log && yarn cache clean",
