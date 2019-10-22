@@ -10,12 +10,12 @@
     "express": "^4.17.1",
     "http-errors": "^1.7.3",
     "morgan": "^1.9.1",
-    "node-binance-api": "^0.9.5",
+    "node-binance-api": "^0.9.7",
     "tulind": "^0.8.18"
   },
   "devDependencies": {
     "rimraf": "^3.0.0",
-    "standard": "^14.1.0"
+    "standard": "^14.3.1"
   },
   "scripts": {
     "clean": "rimraf ./yarn.lock && rimraf ./yarn-*.log && yarn cache clean",
