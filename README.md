@@ -2,7 +2,7 @@
 *Potatoes and black holes*
 
 ### Requires
-- Node v10.16.3
+- Node v12.13.0
 - Yarn v1.19.1
 
 ### Installation
