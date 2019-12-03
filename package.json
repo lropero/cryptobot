@@ -6,22 +6,21 @@
   "author": "Luciano Ropero <lropero@gmail.com>",
   "private": true,
   "dependencies": {
-    "chalk": "^2.4.2",
+    "chalk": "^3.0.0",
     "express": "^4.17.1",
     "http-errors": "^1.7.3",
     "morgan": "^1.9.1",
-    "node-binance-api": "^0.9.8",
+    "node-binance-api": "^0.9.9",
     "tulind": "^0.8.18"
   },
   "devDependencies": {
     "rimraf": "^3.0.0"
   },
   "scripts": {
-    "clean": "rimraf ./yarn.lock && rimraf ./yarn-*.log && yarn cache clean",
-    "init": "rimraf ./node_modules && yarn",
+    "clean": "rm -f ./npm-*.log && rm -f ./package-lock.json && rm -rf ./node_modules && npm cache verify",
     "lint": "npx standard --fix",
-    "nuke": "yarn run clean && yarn run init",
+    "nuke": "npm run clean && npm install",
     "start": "node index.js",
-    "upgrade": "npx upgradeps"
+    "upgrade": "npx upgradeps -n"
   }
 }

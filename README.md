@@ -2,17 +2,16 @@
 *Potatoes and black holes*
 
 ### Requires
-- Node v12.13.0
-- Yarn v1.19.1
+- Node v12.13.1
 
 ### Installation
 ```sh
-$ yarn
+$ npm install
 ```
 
 ### Usage
 Add Binance keys to `config.js`, then:
 ```sh
-$ yarn run start
+$ npm run start
 $ curl http://localhost:7007/chart/BTCUSDT | json_pp
 ```
