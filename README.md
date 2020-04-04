@@ -2,7 +2,7 @@
 *Potatoes and black holes*
 
 ### Requires
-- Node v12.13.1
+- Node v13.12.0
 
 ### Installation
 ```sh
