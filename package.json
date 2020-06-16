@@ -1,23 +1,24 @@
 {
   "name": "cryptobot",
-  "version": "0.0.19",
+  "version": "0.1.0",
   "description": "Trading bot for Binance.",
   "scripts": {
     "clean": "rimraf ./npm-*.log && rimraf ./package-lock.json && rimraf ./node_modules && npm cache verify",
-    "lint": "npx standard --fix",
+    "lint": "prettier-standard --lint",
     "nuke": "npm run clean && npm install",
     "start": "node index.js",
     "upgrade": "npx upgradeps -n"
   },
   "dependencies": {
-    "chalk": "^4.0.0",
+    "chalk": "^4.1.0",
     "express": "^4.17.1",
     "http-errors": "^1.7.3",
     "morgan": "^1.10.0",
-    "node-binance-api": "^0.10.6",
+    "node-binance-api": "^0.11.7",
     "tulind": "^0.8.18"
   },
   "devDependencies": {
+    "prettier-standard": "^16.3.0",
     "rimraf": "^3.0.2"
   },
   "author": "Luciano Ropero <lropero@gmail.com>",

@@ -6,7 +6,7 @@ const morgan = require('morgan')
 const routes = require('./routes')
 const { serverPort } = require('../config')
 
-module.exports = (bot) => {
+module.exports = bot => {
   const server = express()
 
   server.set('bot', bot)

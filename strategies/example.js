@@ -2,7 +2,8 @@ module.exports = {
   name: 'Example strategy',
   periods: 50,
   timeframe: '5m',
-  indicators: [ // https://tulipindicators.org/list
+  indicators: [
+    // https://tulipindicators.org/list
     {
       name: 'macd',
       indicator: 'macd',
